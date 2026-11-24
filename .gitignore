@@ -19,3 +19,5 @@ node_modules/
 
 # macOS
 .DS_Store
+
+.pytest_cache/
