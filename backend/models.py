@@ -32,3 +32,21 @@ class Inspection(Base):
     status: Mapped[str] = mapped_column(String(20), default="created")
 
     project: Mapped["Project"] = relationship(back_populates="inspections")
+   
+    images: Mapped[list["Image"]] = relationship(
+    back_populates="inspection", cascade="all, delete-orphan"
+    )
+class Image(Base):
+    __tablename__ = "images"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    inspection_id: Mapped[int] = mapped_column(ForeignKey("inspections.id"))
+    original_filename: Mapped[str] = mapped_column(String(255))
+    stored_filename: Mapped[str] = mapped_column(String(100), unique=True)
+    content_type: Mapped[str] = mapped_column(String(50))
+    size_bytes: Mapped[int]
+    width: Mapped[int]
+    height: Mapped[int]
+    uploaded_at: Mapped[datetime] = mapped_column(default=utcnow)
+
+    inspection: Mapped["Inspection"] = relationship(back_populates="images")
