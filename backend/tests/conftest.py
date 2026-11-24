@@ -6,10 +6,10 @@ from sqlalchemy.pool import StaticPool
 
 from backend.database import Base, get_db
 from backend.main import app
-
+from backend.services.storage import get_upload_dir
 
 @pytest.fixture()
-def client():
+def client(tmp_path):
     # Fresh in-memory database for every test
     engine = create_engine(
         "sqlite://",
@@ -27,6 +27,7 @@ def client():
             db.close()
 
     app.dependency_overrides[get_db] = override_get_db
+    app.dependency_overrides[get_upload_dir] = lambda: tmp_path / "uploads"
     with TestClient(app) as test_client:
         yield test_client
 
