@@ -28,3 +28,15 @@ class InspectionRead(BaseModel):
     project_id: int
     date: datetime
     status: str
+
+class ImageRead(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    inspection_id: int
+    original_filename: str
+    content_type: str
+    size_bytes: int
+    width: int
+    height: int
+    uploaded_at: datetime
