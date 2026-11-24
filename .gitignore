@@ -1,0 +1,21 @@
+# Python
+venv/
+__pycache__/
+*.pyc
+
+# Secrets and local data
+.env
+uploads/
+*.db
+.env.pub
+
+# Frontend
+node_modules/
+.next/
+
+# AI model weights (large files)
+*.pt
+*.onnx
+
+# macOS
+.DS_Store
