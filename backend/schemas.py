@@ -40,3 +40,26 @@ class ImageRead(BaseModel):
     width: int
     height: int
     uploaded_at: datetime
+class DetectionRead(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    inspection_id: int
+    image_id: int
+    object_class: str
+    confidence: float
+    x1: float
+    y1: float
+    x2: float
+    y2: float
+    is_flagged: bool
+    review_status: str
+    created_at: datetime
+
+
+class AnalysisSummary(BaseModel):
+    inspection_id: int
+    status: str
+    images_analyzed: int
+    detections_total: int
+    flagged_total: int

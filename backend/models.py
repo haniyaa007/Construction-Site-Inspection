@@ -36,6 +36,9 @@ class Inspection(Base):
     images: Mapped[list["Image"]] = relationship(
     back_populates="inspection", cascade="all, delete-orphan"
     )
+    detections: Mapped[list["Detection"]] = relationship(
+    back_populates="inspection", cascade="all, delete-orphan"
+    )
 class Image(Base):
     __tablename__ = "images"
 
@@ -50,3 +53,25 @@ class Image(Base):
     uploaded_at: Mapped[datetime] = mapped_column(default=utcnow)
 
     inspection: Mapped["Inspection"] = relationship(back_populates="images")
+    detections: Mapped[list["Detection"]] = relationship(
+    back_populates="image", cascade="all, delete-orphan"
+    )
+
+class Detection(Base):
+    __tablename__ = "detections"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    inspection_id: Mapped[int] = mapped_column(ForeignKey("inspections.id"))
+    image_id: Mapped[int] = mapped_column(ForeignKey("images.id"))
+    object_class: Mapped[str] = mapped_column(String(50))
+    confidence: Mapped[float]
+    x1: Mapped[float]
+    y1: Mapped[float]
+    x2: Mapped[float]
+    y2: Mapped[float]
+    is_flagged: Mapped[bool] = mapped_column(default=False)
+    review_status: Mapped[str] = mapped_column(String(20), default="pending")
+    created_at: Mapped[datetime] = mapped_column(default=utcnow)
+
+    inspection: Mapped["Inspection"] = relationship(back_populates="detections")
+    image: Mapped["Image"] = relationship(back_populates="detections")
