@@ -39,6 +39,9 @@ class Inspection(Base):
     detections: Mapped[list["Detection"]] = relationship(
     back_populates="inspection", cascade="all, delete-orphan"
     )
+    issues: Mapped[list["Issue"]] = relationship(
+    back_populates="inspection", cascade="all, delete-orphan"
+    )
 class Image(Base):
     __tablename__ = "images"
 
@@ -75,3 +78,21 @@ class Detection(Base):
 
     inspection: Mapped["Inspection"] = relationship(back_populates="detections")
     image: Mapped["Image"] = relationship(back_populates="detections")
+
+class Issue(Base):
+    __tablename__ = "issues"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    inspection_id: Mapped[int] = mapped_column(ForeignKey("inspections.id"))
+    detection_id: Mapped[int | None] = mapped_column(
+        ForeignKey("detections.id"), default=None
+    )  # optional: the detection this issue came from
+    title: Mapped[str] = mapped_column(String(200))
+    severity: Mapped[str] = mapped_column(String(20))
+    description: Mapped[str | None] = mapped_column(String(2000), default=None)
+    assigned_to: Mapped[str | None] = mapped_column(String(100), default=None)
+    status: Mapped[str] = mapped_column(String(20), default="open")
+    created_at: Mapped[datetime] = mapped_column(default=utcnow)
+    updated_at: Mapped[datetime] = mapped_column(default=utcnow, onupdate=utcnow)
+
+    inspection: Mapped["Inspection"] = relationship(back_populates="issues")
