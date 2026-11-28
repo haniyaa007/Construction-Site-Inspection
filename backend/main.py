@@ -1,7 +1,8 @@
 from fastapi import FastAPI
 from backend import models  # noqa: F401  (import so tables are registered)
 from backend.database import Base, engine
-from backend.routers import analysis, inspections, projects, uploads,  detections, issues
+from backend.routers import analysis, inspections, projects, uploads,  detections, issues, reports
+
 
 Base.metadata.create_all(bind=engine)
 
@@ -13,6 +14,7 @@ app.include_router(uploads.router)
 app.include_router(analysis.router)
 app.include_router(detections.router)
 app.include_router(issues.router)
+app.include_router(reports.router)
 
 @app.get("/health")
 def health():
