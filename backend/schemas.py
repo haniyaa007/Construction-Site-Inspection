@@ -103,3 +103,42 @@ class IssueRead(BaseModel):
     status: str
     created_at: datetime
     updated_at: datetime
+
+class ClassCount(BaseModel):
+    object_class: str
+    count: int
+
+
+class ReportObservation(BaseModel):
+    detection_id: int
+    image_id: int
+    original_filename: str
+    object_class: str
+    confidence: float
+    review_status: str
+
+
+class ReportIssue(BaseModel):
+    id: int
+    title: str
+    severity: str
+    status: str
+    assigned_to: str | None
+
+
+class ReportRead(BaseModel):
+    inspection_id: int
+    project_name: str
+    project_location: str | None
+    inspection_date: datetime
+    generated_at: datetime
+    images_analyzed: int
+    detections_total: int
+    detection_counts: list[ClassCount]
+    observations_total: int
+    observations_by_review_status: dict[str, int]
+    observations: list[ReportObservation]
+    issues_total: int
+    issues_by_status: dict[str, int]
+    issues: list[ReportIssue]
+    limitations: list[str]
